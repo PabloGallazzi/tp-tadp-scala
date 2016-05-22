@@ -21,4 +21,9 @@ class Persona_Test {
     persona.cumpliAnio
     assertEquals(2, persona.edad)
   }
+
+  @Test
+  def sosHumano_test() = {
+    assertEquals(true, persona.sosHumano)
+  }
 }
