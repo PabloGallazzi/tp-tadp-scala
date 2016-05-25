@@ -10,4 +10,9 @@ class Persona(var edad: Int) {
   def sosHumano = {
     true
   }
+
+  def sosBebe = {
+    edad < 2
+  }
+
 }
