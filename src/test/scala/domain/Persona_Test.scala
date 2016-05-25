@@ -26,4 +26,8 @@ class Persona_Test {
   def sosHumano_test() = {
     assertEquals(true, persona.sosHumano)
   }
+
+  @Test
+  def sosBebe_test() =
+    assertEquals(true,persona.sosBebe)
 }
