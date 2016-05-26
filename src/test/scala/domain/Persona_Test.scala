@@ -10,10 +10,12 @@ import org.junit.Assert._
 
 class Persona_Test {
   var persona: Persona = null
+  var personaParaConocer: Persona = null
 
   @Before
   def setup() = {
     persona = new Persona(1)
+    personaParaConocer = new Persona(2)
   }
 
   @Test
@@ -30,4 +32,14 @@ class Persona_Test {
   @Test
   def sosBebe_test() =
     assertEquals(true,persona.sosBebe)
+
+  @Test
+  def sosMayor_test() =
+    assertEquals(false,persona.sosMayor)
+
+  @Test
+  def conocer_test() ={
+    persona.conocer(personaParaConocer)
+    assertEquals(persona.conocidos.last,personaParaConocer)
+  }
 }
