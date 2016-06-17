@@ -31,7 +31,7 @@ class EquipoTest {
 
   @Test
   def`si un equipo tiene lider lo devuelve con sus atributos stats e items` = {
-    heroe.sosGuerrero()
+    heroe.ahoraSosGuerrero()
     assertEquals(unEquipo.getLider,heroe)
     assertEquals(unEquipo.getLider.statPrincipal,16,0)
     heroe.obtenerItem(espadaDeLaVida)
@@ -50,8 +50,8 @@ class EquipoTest {
 
   @Test
   def `al ganar un item se lo queda el que mas aumenta su stat principal`= {
-    heroe.sosGuerrero()
-    otroHeroe.sosMago()
+    heroe.ahoraSosGuerrero()
+    otroHeroe.ahoraSosMago()
     assert(heroe.statPrincipal < otroHeroe.statPrincipal)
     unEquipo.obtenerItem(talismanDeDedicacion)
     assert(otroHeroe.getInventario.contains(talismanDeDedicacion))
@@ -59,16 +59,21 @@ class EquipoTest {
 
   @Test
   def `al ganar un item que no lo puede usar nadie, aumenta el oro en su valor` = {
-    heroe.sosGuerrero()
-    otroHeroe.sosLadron()
+    heroe.ahoraSosGuerrero()
+    otroHeroe.ahoraSosLadron()
     unEquipo.obtenerItem(palitoMagico)
     assert(!otroHeroe.getInventario.contains(palitoMagico))
     assert(!heroe.getInventario.contains(palitoMagico))
-    assertEquals(unEquipo.getOro, palitoMagico.getValor)
+    assertEquals(unEquipo.oro, palitoMagico.getValor)
 
   }
 
 
+  @Test
+  def `se puede saber el trabajo del lider del equipo` ={
+    heroe.ahoraSosLadron()
+    assert(unEquipo.getLider.sosLadron)
+  }
 
 /*
    @Test

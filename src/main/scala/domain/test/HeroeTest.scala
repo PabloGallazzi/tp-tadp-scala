@@ -47,21 +47,21 @@ class HeroeTest {
   def `se crea un guerrero y se calcula correctamente el stat principal` =
   {
     assertEquals(heroe.statPrincipal,0,0)
-    heroe.sosGuerrero
+    heroe.ahoraSosGuerrero
     assertEquals(heroe.statPrincipal,16,0)
   }
 
   @Test
   def `se cambia el trabajo de un heroe correctamente y sus stat se modifican` = {
-    heroe.sosGuerrero
+    heroe.ahoraSosGuerrero
     assertEquals(heroe.getHP, new Guerrero(heroe).incHP+ new Heroe(1, 1, 1, 1).hp,0)
-    heroe.sosMago
+    heroe.ahoraSosMago
     assertEquals(heroe.getHP, 1,0)
   }
 
   @Test
   def `un talisman maldito pone todos los stats en 1` = {
-    heroe.sosGuerrero
+    heroe.ahoraSosGuerrero
     heroe.equipar(talismanMaldito)
     heroe.equipar(espadaDeLaVida)
 
@@ -70,7 +70,7 @@ class HeroeTest {
 
   @Test
   def `se agregan items al equipo del heroe y se calcula correctamente sus stats` = {
-    heroe.sosGuerrero
+    heroe.ahoraSosGuerrero
     heroe.equipar(espadaDeLaVida)
     assertEquals(heroe.getFuerza,heroe.getHP,0)
 
@@ -80,10 +80,10 @@ class HeroeTest {
   def `un heroe que no es mago no puede equipar un palitoMagico` = {
     heroe.equipar(palitoMagico)
     assertEquals(heroe.elementosEquipados.equipamiento.size,0,0)
-    heroe.sosGuerrero
+    heroe.ahoraSosGuerrero
     heroe.equipar(palitoMagico)
     assertEquals(heroe.elementosEquipados.equipamiento.size,0,0)
-    heroe.sosMago
+    heroe.ahoraSosMago
     heroe.equipar(palitoMagico)
     assertEquals(heroe.elementosEquipados.equipamiento.size,1,0)
 
@@ -91,26 +91,42 @@ class HeroeTest {
 
   @Test
   def `palito magico altera la inteligencia en 20 a un mago` = {
-    heroe.sosMago
+    heroe.ahoraSosMago
     assertEquals(heroe.getInteligencia, 21, 0)
     heroe.equipar(palitoMagico)
     assertEquals(heroe.getInteligencia, 41, 0)
     assert(heroe.statPrincipal == heroe.getInteligencia)
 
   }
-/*
 
   @Test
-  def `cuando un heroe equipa un item que ocupa la misma parte del cuerpo, se reemplaza` = {
+  def `cuando un heroe equipa un item que ocupa una parte del cuerpo ya ocupada por otro item se reemplaza` = {
+
     heroe.obtenerItem(talismanDeDedicacion)
     heroe.equipar(talismanDeDedicacion)
     assert(heroe.getElementosEquipados.contains(talismanDeDedicacion))
     heroe.equipar(talismanMaldito)
     assert(!heroe.getElementosEquipados.contains(talismanDeDedicacion))
     assert(heroe.getElementosEquipados.contains(talismanMaldito))
+  }
+
+  @Test
+  def `solo un horeo sin trabajo puede equipar la vincha Del Bufalo De Agua y modifica los stats segun su condicion` = {
+    heroe.ahoraSosLadron()
+    heroe.obtenerItem(vinchaDelBufaloDeAgua)
+    heroe.equipar(vinchaDelBufaloDeAgua)
+    assert(!heroe.getElementosEquipados.contains(vinchaDelBufaloDeAgua))
+
+    heroe.ahoraNoTenesTrabajo()
+    heroe.equipar(vinchaDelBufaloDeAgua)
+    assertEquals((heroe.getFuerza,heroe.getHP,heroe.getInteligencia,heroe.getVelocidad),(11.0,11.0,1.0,11.0))
+
+    val otroHeroe: Heroe = new Heroe(1,2,1,1)
+    otroHeroe.obtenerItem(vinchaDelBufaloDeAgua)
+    otroHeroe.equipar(vinchaDelBufaloDeAgua)
+    assertEquals((otroHeroe.getFuerza,otroHeroe.getHP,otroHeroe.getInteligencia,otroHeroe.getVelocidad),(2.0,1.0,31.0,1.0))
 
   }
-*/
 
 }
 

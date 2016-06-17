@@ -5,11 +5,21 @@ package domain
   */
 trait Item {
 
-  def incrementarFuerza(heroe:Heroe): (Double=>Double)
-  def incrementarVelocidad(heroe:Heroe):(Double=>Double)
-  def incrementarInteligenia(heroe:Heroe):(Double=>Double)
-  def incrementarVida(heroe:Heroe):(Double=>Double)
-  def sosEquipable(heroe:Heroe): Boolean
-  def getValor: Int
+  val valor: Int
+  val prioridad: Int
+
+  def incrementarFuerza(heroe: Heroe): (Double => Double) = { x => x }
+
+  def incrementarVelocidad(heroe: Heroe): (Double => Double) = { x => x }
+
+  def incrementarInteligenia(heroe: Heroe): (Double => Double) = { x => x }
+
+  def incrementarVida(heroe: Heroe): (Double => Double) = { x => x }
+
+  def sosEquipable(heroe: Heroe): Boolean = true
+
+  def getValor: Int = valor
+
+  def getPrioridad: Int = prioridad
 
 }

@@ -3,19 +3,25 @@ package domain
 /**
   * Created by Mariano on 10/6/2016.
   */
-case class Heroe(var hp: Double, var fuerza:Double, var velocidad:Double, var inteligencia: Double){
+case class Heroe(var hp: Double, var fuerza:Double,
+                 var velocidad:Double,
+                 var inteligencia: Double,
+                 var trabajo: Option[TipoTrabajo] = None){
 
-  var trabajo: Option[TipoTrabajo] = None
   var inventario: Set[Item] = Set()
   val elementosEquipados: Inventario[Item] = new Inventario[Item]
-  var necesitasCurarte: Boolean = false
+  var copia: Option[Heroe] = None
 
 
-  def sosGuerrero() = trabajo = Some(new Guerrero(this))
+  def ahoraSosGuerrero() = trabajo = Some(new Guerrero(this))
+  def ahoraSosMago() = trabajo = Some(new Mago(this))
+  def ahoraSosLadron() = trabajo = Some(new Ladron(this))
+  def ahoraNoTenesTrabajo() =  trabajo = None
 
-  def sosMago() = trabajo = Some(new Mago(this))
-  def sosLadron() = trabajo = Some(new Ladron(this))
-  def noTenesTrabajo() =  trabajo = None
+  def sosMago = trabajo.isInstanceOf[Option[Mago]]
+  def sosGuerrero = trabajo.isInstanceOf[Option[Guerrero]]
+  def sosLadron = trabajo.isInstanceOf[Option[Ladron]]
+  def tenesTrabajo = !trabajo.isEmpty
 
   def statPrincipal = {
     trabajo match{
@@ -24,40 +30,41 @@ case class Heroe(var hp: Double, var fuerza:Double, var velocidad:Double, var in
     }
   }
 
-  def ralizarTarea(tarea: Tarea) = tarea.tePudoRealizar(this)
-
   def equipar(item: Item) =
     if (inventario.contains(item) && item.sosEquipable(this)) elementosEquipados.agregar(item)
 
   def desequipar(item:Item) = elementosEquipados.quitarItem(item)
 
   def getHP: Double =
-    this.statMinimo(elementosEquipados.incrementadorStats(this)._1.apply(getHPTrabajo))
+    this.statMinimo(elementosEquipados.incrementadorStats(this).
+      _1.apply(getHPTrabajo))
 
   def getFuerza: Double =
-    this.statMinimo(elementosEquipados.incrementadorStats(this)._2.apply(getFuerzaTrabajo))
+    this.statMinimo(elementosEquipados.incrementadorStats(this).
+      _2.apply(getFuerzaTrabajo))
 
   def getVelocidad: Double =
-    this.statMinimo(elementosEquipados.incrementadorStats(this)._3.apply(getVelocidadTrabajo))
+    this.statMinimo(elementosEquipados.incrementadorStats(this).
+      _3.apply(getVelocidadTrabajo))
 
   def getInteligencia: Double =
-    this.statMinimo(elementosEquipados.incrementadorStats(this)._4.apply(getInteligenciaTrabajo))
+    this.statMinimo(elementosEquipados.incrementadorStats(this).
+      _4.apply(getInteligenciaTrabajo))
 
   def getElementosEquipados=
     elementosEquipados.equipamiento
+  private def setElementosEquipados(elems: List[Item]) =
+    elementosEquipados.equipamiento = elems
 
-  def getTrabajo =
-    trabajo
 
-  def getInventario =
-    inventario
+  def getInventario = inventario
+  private def setInventario(inv: Set[Item]) = inventario = inv
 
   def obtenerItem(item: Item) = inventario += item
 
-  def teMataron() = necesitasCurarte = true
-  def estasCurado() = necesitasCurarte = false
+  def getCopia = copy(hp,fuerza,velocidad,inteligencia,trabajo)
 
-  def getCopia = copy(hp,fuerza,velocidad,inteligencia)
+
   private def getFuerzaTrabajo: Double = {
     trabajo.map(x => x.incFz).getOrElse(0.0)+ fuerza
   }
@@ -70,11 +77,30 @@ case class Heroe(var hp: Double, var fuerza:Double, var velocidad:Double, var in
   private def getHPTrabajo: Double= {
     trabajo.map(x => x.incHP).getOrElse(0.0)+hp
   }
-
   private def statMinimo(stat:Double): Double ={
     if (stat>1) stat
     else 1
   }
+
+  /**MISION**/
+  def hacerCopiaConEquipamiento() = {
+    val heroeCopia: Heroe = getCopia
+    heroeCopia.setInventario(inventario)
+    heroeCopia.setElementosEquipados(getElementosEquipados)
+    copia = Some(heroeCopia)
+  }
+
+  def restaurarEstadoOriginal() =
+    if (copia.isDefined){
+        hp = copia.get.hp
+        fuerza = copia.get.fuerza
+        inteligencia = copia.get.inteligencia
+        velocidad = copia.get.velocidad
+        inventario =   copia.get.getInventario
+        setElementosEquipados(copia.get.getElementosEquipados)
+      }
+
+
 
 }
 
