@@ -44,8 +44,8 @@ class EquipoTest {
   def `cuando un equipo de un miembro obtiene un item, si lo puede equipar, se lo queda` ={
     unEquipo.quitarMiembro(otroHeroe)
     unEquipo.obtenerItem(talismanDeDedicacion)
-    assertEquals(heroe.getInventario.size,1)
-    assert(heroe.getInventario.contains(espadaDeLaVida))
+    assertEquals(heroe.getInventario.size,2)
+    assert(heroe.getInventario.contains(espadaDeLaVida) && heroe.getInventario.contains(talismanDeDedicacion))
   }
 
   @Test
