@@ -27,7 +27,7 @@ abstract class Tarea {
 
 case object pelearContraMonstruo extends Tarea {
 
-  override def afectadorHeroe: (Heroe => Unit) = {x => if(x.fuerza <20) x.hp = 1}
+  override def afectadorHeroe: (Heroe => Unit) = {x => if(x.fuerza < 20) x.hp = 1}
 
   def facilidadTarea(heroe: Heroe, equipo: Equipo): Double = {
     equipo.getLider match {

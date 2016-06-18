@@ -6,7 +6,7 @@ import util.control.Breaks._
   */
 object Taberna {
 
-  val tablonDeAnuncios: List[Mision] = List()
+  val tablonDeAnuncios: List[Mision] = List(misionBase,misionObtenerTalisman,misionConquistarDungeon)
   type Criterio = (Equipo,Equipo) => Boolean
 
   def elegirMisionSegunCriterio(equipo: Equipo,criterio: Criterio): Option[Mision] = {
@@ -16,7 +16,7 @@ object Taberna {
 
   }
 
-  def comoQuedariaEquipoAlHacerMision(equipo: Equipo, mision:Mision): Equipo ={
+  private def comoQuedariaEquipoAlHacerMision(equipo: Equipo, mision:Mision): Equipo ={
     val copiaEquipo = equipo.getCopia
     mision.teVaARealizarEquipo(equipo) match{
       case equipoModificado:Equipo => {
@@ -26,6 +26,7 @@ object Taberna {
       case _ => equipo
     }
   }
+
 
   def entrenarEquipo(equipo: Equipo) = {
     breakable {

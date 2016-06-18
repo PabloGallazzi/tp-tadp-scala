@@ -5,6 +5,8 @@ import util.control.Breaks._
   */
 abstract class Mision( val tareas: List[Tarea]) {
 
+  def cobrarRecompenza(equipo: Equipo): Unit
+
   def sosRealizablePorEquipo(equipo: Equipo) =
     tareas.count(t => t.sosRealizablePor(equipo)) > 0
 
@@ -15,11 +17,15 @@ abstract class Mision( val tareas: List[Tarea]) {
         equipo.restaurarEstadoOriginal(unEquipo)
         (tarea,estadoEquipo)
       }
-      case Some(e) => e
-      case None => equipo
+      case Some(e:Equipo) => {
+        cobrarRecompenza(e)
+        e
+      }
+      case _ => equipo
     }
 
   }
+
 
 
   private def terminoODondeQuedo(equipo: Equipo): Option[Any] = {
@@ -31,7 +37,7 @@ abstract class Mision( val tareas: List[Tarea]) {
           break
         }
         else {
-          equipo.masAptoParaTarea(t)
+          t.teVaARealizar(equipo)
           option = Some(equipo)
         }
 
@@ -42,6 +48,20 @@ abstract class Mision( val tareas: List[Tarea]) {
 
 }
 
-case object misionBase extends Mision(List(robarTalisman, forzarPuerta, pelearContraMonstruo))
+case object misionBase extends Mision(List(pelearContraMonstruo, forzarPuerta, robarTalisman)){
 
-case object misionObtenerTalisman extends Mision(List(robarTalisman))
+  def cobrarRecompenza(equipo: Equipo) =
+    equipo.oro += 200
+
+}
+
+case object misionObtenerTalisman extends Mision(List(pelearContraMonstruo)) {
+  def cobrarRecompenza(equipo: Equipo) =
+    equipo.oro += 50
+}
+
+case object misionConquistarDungeon extends Mision(List(forzarPuerta,pelearContraMonstruo)){
+  def cobrarRecompenza(equipo: Equipo) =
+    equipo.oro += 100
+
+}
