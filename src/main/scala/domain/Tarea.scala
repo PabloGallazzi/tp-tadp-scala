@@ -12,7 +12,7 @@ abstract class Tarea {
   def afectadorEquipo: (Equipo => Unit) = { x => }
 
   def teVaARealizar(equipo: Equipo) = {
-    if (this.sosRealizablePor(equipo)) {
+    if (sosRealizablePor(equipo)) {
       val masApto = equipo.masAptoParaTarea(this)
       afectadorHeroe(masApto)
       afectadorEquipo(equipo)
@@ -26,16 +26,19 @@ abstract class Tarea {
 }
 
 case object pelearContraMonstruo extends Tarea {
-  override def afectadorHeroe: (Heroe => Unit) = {x => if(x.fuerza <20) x.hp =1}
+
+  override def afectadorHeroe: (Heroe => Unit) = {x => if(x.fuerza <20) x.hp = 1}
+
   def facilidadTarea(heroe: Heroe, equipo: Equipo): Double = {
     equipo.getLider match {
-      case h =>
+      case Some(h) =>
         h.sosGuerrero match{
           case true => 20
           case false =>
             if (heroe.sosGuerrero) 10
             else 0
         }
+      case None => 0
 
     }
   }
@@ -43,12 +46,14 @@ case object pelearContraMonstruo extends Tarea {
 }
 
 case object forzarPuerta extends Tarea {
-  def facilidadTarea(heroe: Heroe,equipo: Equipo): Double =
-    10*equipo.integrantes.count(h=> h.sosLadron) + heroe.inteligencia
+
+  def facilidadTarea(heroe: Heroe,equipo: Equipo): Double = {
+    (10 * equipo.integrantes.count(h => h.sosLadron)) + heroe.getInteligencia
+  }
 
 
   override def afectadorHeroe: (Heroe => Unit) = {x=>
-    if(!x.sosMago || !x.sosLadron) {
+    if(!(x.sosMago || x.sosLadron)) {
       x.hp -= 5
       x.inteligencia += 1
     }
@@ -63,6 +68,9 @@ case object robarTalisman extends Tarea {
 
   override def afectadorEquipo: (Equipo => Unit) = {x=> x.obtenerItem(talismanes(random_index)) }
   def facilidadTarea(heroe: Heroe,equipo: Equipo): Double = heroe.velocidad
-  override def sosRealizablePor(equipo: Equipo) = equipo.getLider.sosLadron
+
+  override def sosRealizablePor(equipo: Equipo): Boolean =
+    equipo.getLider.exists(h=>h.sosLadron)
+
 
 }

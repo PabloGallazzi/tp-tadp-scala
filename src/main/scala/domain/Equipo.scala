@@ -16,7 +16,7 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
     agregarMiembro(otroHeroe)
   }
 
-  def quitarMiembro(heroe: Heroe) = integrantes = integrantes.filter(x => x.eq(heroe))
+  def quitarMiembro(heroe: Heroe) = integrantes = integrantes.filter(x => !x.eq(heroe))
 
   def obtenerItem(item: Item) = {
     val heroesQuePuedenEquiparItem: List[Heroe] = integrantes.filter(x=> item.sosEquipable(x))
@@ -43,13 +43,13 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
     }
   }
 
-  def getLider: Heroe = {
+  def getLider: Option[Heroe] = {
     val statsPrincipales: List[Double] = integrantes.map(h => h.statPrincipal)
     val maximo: Double = statsPrincipales.max
-    if (statsPrincipales.count(x => x == maximo) == 2) null
-    else {
-      integrantes.filter(x=> x.statPrincipal == maximo).head
-    }
+    if (statsPrincipales.count(x => x == maximo) == 2) None
+    else
+      integrantes.filter(x=> x.statPrincipal == maximo).headOption
+
   }
 
   /** TAREA **/
@@ -61,11 +61,11 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
   /** MISION **/
   def copiarIntegrantes = {
     integrantes.foreach(h => h.hacerCopiaConEquipamiento())
-    integrantes
   }
 
   def getCopia ={
-    copy(nombre,this.copiarIntegrantes,oro)
+    this.copiarIntegrantes
+    copy(nombre,integrantes,oro)
   }
 
   def realizarMision(mision: Mision) = mision.teVaARealizarEquipo(this)

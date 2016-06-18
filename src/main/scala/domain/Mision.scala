@@ -15,7 +15,7 @@ abstract class Mision( val tareas: List[Tarea]) {
         equipo.restaurarEstadoOriginal(unEquipo)
         (tarea,estadoEquipo)
       }
-      case Some(unEquipo) => unEquipo
+      case Some(e) => e
       case None => equipo
     }
 
@@ -27,8 +27,8 @@ abstract class Mision( val tareas: List[Tarea]) {
     breakable {
       for (t <- tareas) {
         if (!t.sosRealizablePor(equipo)) {
-          break
           option = Some((t, equipo))
+          break
         }
         else {
           equipo.masAptoParaTarea(t)
@@ -40,7 +40,8 @@ abstract class Mision( val tareas: List[Tarea]) {
     option
   }
 
-
-
 }
 
+case object misionBase extends Mision(List(robarTalisman, forzarPuerta, pelearContraMonstruo))
+
+case object misionObtenerTalisman extends Mision(List(robarTalisman))

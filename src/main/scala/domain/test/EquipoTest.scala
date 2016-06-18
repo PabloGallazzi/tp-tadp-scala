@@ -26,18 +26,18 @@ class EquipoTest {
 
   @Test
   def `si un equipo tiene dos lideres devuelve null` = {
-    assertEquals(unEquipo.getLider,null)
+    assertEquals(unEquipo.getLider,None)
   }
 
   @Test
   def`si un equipo tiene lider lo devuelve con sus atributos stats e items` = {
     heroe.ahoraSosGuerrero()
-    assertEquals(unEquipo.getLider,heroe)
-    assertEquals(unEquipo.getLider.statPrincipal,16,0)
+    assertEquals(unEquipo.getLider.get,heroe)
+    assertEquals(unEquipo.getLider.get.statPrincipal,16,0)
     heroe.obtenerItem(espadaDeLaVida)
     heroe.equipar(espadaDeLaVida)
-    assertEquals(unEquipo.getLider.getElementosEquipados.size,1)
-    assertEquals(unEquipo.getLider.getFuerza, unEquipo.getLider.getHP,0)
+    assertEquals(unEquipo.getLider.get.getElementosEquipados.size,1)
+    assertEquals(unEquipo.getLider.get.getFuerza, unEquipo.getLider.get.getHP,0)
 
   }
   @Test
@@ -72,7 +72,8 @@ class EquipoTest {
   @Test
   def `se puede saber el trabajo del lider del equipo` ={
     heroe.ahoraSosLadron()
-    assert(unEquipo.getLider.sosLadron)
+    assert(unEquipo.getLider.get.sosLadron)
+
   }
 
 /*

@@ -30,7 +30,7 @@ case object espadaDeLaVida extends Manipulable(100, 1){
 case object palitoMagico extends Manipulable(20, 2) {
   def getCantidadDeManos: Int = 1
   override def incrementarInteligenia(heroe:Heroe):(Double=>Double) = {x=> x+20}
-  override def sosEquipable(heroe:Heroe): Boolean=  heroe.trabajo.orNull.isInstanceOf[Mago]
+  override def sosEquipable(heroe:Heroe): Boolean=  heroe.sosMago
 
 }
 

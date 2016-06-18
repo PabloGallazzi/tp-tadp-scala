@@ -21,12 +21,32 @@ case object talismanMaldito extends Talisman(80,0) {
 
   }
 
-case object talismanDeDedicacion extends Talisman(100,2) {
+case object talismanDeDedicacion extends Talisman(100,1) {
 
-  override def incrementarFuerza(heroe:Heroe): (Double=>Double) = {x=> x+ heroe.statPrincipal*0.1}
-  override def incrementarVelocidad(heroe:Heroe):(Double=>Double) = {x=>x+ heroe.statPrincipal*1.1}
-  override def incrementarInteligenia(heroe:Heroe):(Double=>Double) = {x=>x+ heroe.statPrincipal*0.1}
-  override def incrementarVida(heroe:Heroe):(Double=>Double) = {x=>x+ heroe.statPrincipal*0.1}
+  override def incrementarFuerza(heroe:Heroe): (Double=>Double) = {x=>
+      val copia = heroe.getCopia
+      copia.setElementosEquipados(heroe.getElementosEquipados)
+      copia.desequipar(this)
+      x + copia.statPrincipal*0.1}
+
+
+  override def incrementarVelocidad(heroe:Heroe):(Double=>Double) = {x=>
+    val copia = heroe.getCopia
+    copia.setElementosEquipados(heroe.getElementosEquipados)
+    copia.desequipar(this)
+    x + copia.statPrincipal*0.1}
+
+  override def incrementarInteligenia(heroe:Heroe):(Double=>Double) ={x=>
+    val copia = heroe.getCopia
+    copia.setElementosEquipados(heroe.getElementosEquipados)
+    copia.desequipar(this)
+    x + copia.statPrincipal*0.1}
+
+  override def incrementarVida(heroe:Heroe):(Double=>Double) = {x=>
+    val copia = heroe.getCopia
+    copia.setElementosEquipados(heroe.getElementosEquipados)
+    copia.desequipar(this)
+    x + copia.statPrincipal*0.1}
 
   }
 

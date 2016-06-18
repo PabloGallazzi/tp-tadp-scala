@@ -13,22 +13,20 @@ case class Heroe(var hp: Double, var fuerza:Double,
   var copia: Option[Heroe] = None
 
 
-  def ahoraSosGuerrero() = trabajo = Some(new Guerrero(this))
-  def ahoraSosMago() = trabajo = Some(new Mago(this))
-  def ahoraSosLadron() = trabajo = Some(new Ladron(this))
+  def ahoraSosGuerrero() = trabajo = Some(Guerrero)
+  def ahoraSosMago() = trabajo = Some(Mago)
+  def ahoraSosLadron() = trabajo = Some(Ladron)
   def ahoraNoTenesTrabajo() =  trabajo = None
 
-  def sosMago = trabajo.isInstanceOf[Option[Mago]]
-  def sosGuerrero = trabajo.isInstanceOf[Option[Guerrero]]
-  def sosLadron = trabajo.isInstanceOf[Option[Ladron]]
+  def sosMago = trabajo.orNull.eq(Mago)
+  def sosGuerrero = trabajo.orNull.eq(Guerrero)
+  def sosLadron = trabajo.orNull.eq(Ladron)
   def tenesTrabajo = !trabajo.isEmpty
 
-  def statPrincipal = {
-    trabajo match{
-        case Some(x) => x.statPrincipal
-        case None => 0.0
-    }
-  }
+  def statPrincipal: Double =
+   trabajo.map(t => t.statPrincipal(this)).getOrElse(0.0)
+
+
 
   def equipar(item: Item) =
     if (inventario.contains(item) && item.sosEquipable(this)) elementosEquipados.agregar(item)
@@ -53,12 +51,12 @@ case class Heroe(var hp: Double, var fuerza:Double,
 
   def getElementosEquipados=
     elementosEquipados.equipamiento
-  private def setElementosEquipados(elems: List[Item]) =
+  def setElementosEquipados(elems: List[Item]) =
     elementosEquipados.equipamiento = elems
 
 
   def getInventario = inventario
-  private def setInventario(inv: Set[Item]) = inventario = inv
+  def setInventario(inv: Set[Item]) = inventario = inv
 
   def obtenerItem(item: Item) = inventario += item
 

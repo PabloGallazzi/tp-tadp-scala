@@ -14,6 +14,7 @@ class HeroeTest {
   heroe.obtenerItem(palitoMagico)
   heroe.obtenerItem(talismanMaldito)
   heroe.obtenerItem(espadaDeLaVida)
+  heroe.obtenerItem(talismanDelMinimalismo)
 
   @Test
   def `los stats de un heroe sin trabjo se calculan correctamente` = {
@@ -28,7 +29,7 @@ class HeroeTest {
     heroe.equipar(talismanDeDedicacion)
     println(heroe.getElementosEquipados)
     assertEquals(heroe.getElementosEquipados.size,2)
-    assertEquals(heroe.getInventario.size, 3)
+    assertEquals(heroe.getInventario.size, 4)
     println(heroe.getElementosEquipados)
 
 
@@ -54,7 +55,7 @@ class HeroeTest {
   @Test
   def `se cambia el trabajo de un heroe correctamente y sus stat se modifican` = {
     heroe.ahoraSosGuerrero
-    assertEquals(heroe.getHP, new Guerrero(heroe).incHP+ new Heroe(1, 1, 1, 1).hp,0)
+    assertEquals(heroe.getHP, Guerrero.incHP + new Heroe(1, 1, 1, 1).hp,0)
     heroe.ahoraSosMago
     assertEquals(heroe.getHP, 1,0)
   }
@@ -126,6 +127,26 @@ class HeroeTest {
     otroHeroe.equipar(vinchaDelBufaloDeAgua)
     assertEquals((otroHeroe.getFuerza,otroHeroe.getHP,otroHeroe.getInteligencia,otroHeroe.getVelocidad),(2.0,1.0,31.0,1.0))
 
+  }
+
+  @Test
+  def `talismanDeLaDedicacion incrementa todos los stats en el 10% del stat princpal` ={
+    heroe.obtenerItem(talismanDeDedicacion)
+    heroe.equipar(talismanDeDedicacion)
+    assertEquals(heroe.getFuerza, 1, 0)
+    heroe.ahoraSosMago()
+    assertEquals(heroe.getFuerza,3.1,0)
+  }
+
+
+  @Test
+  def `los items afectan al heroe segun su prioridad` = {
+    heroe.sosMago
+    heroe.equipar(espadaDeLaVida)
+    heroe.equipar(talismanDelMinimalismo)
+    assertEquals(heroe.getHP,heroe.getFuerza,0)
+    heroe.equipar(talismanMaldito)
+    assert(heroe.getFuerza ==1 && heroe.getHP ==1 && heroe.getInteligencia ==1 && heroe.getVelocidad ==1)
   }
 
 }
