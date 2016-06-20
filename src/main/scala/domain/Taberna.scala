@@ -23,7 +23,7 @@ class Taberna(misiones: List[Mision]) {
       case _ => {
         def resultado: Resultado = mejorMision.realizarsePor(equipo)
         resultado match {
-          case Fracaso(tarea, _) => new Fracaso(tarea, equipo)
+          case Fracaso(tarea, equipo) => new Fracaso(tarea, equipo)
           case Exito(equipoDespuesDeTarea) => realizarMisiones(misiones.filter(mision => mision != mejorMision), equipoDespuesDeTarea, criterio)
         }
       }
