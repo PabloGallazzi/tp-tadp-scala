@@ -3,77 +3,53 @@ package domain
 
 /**
   * Created by Mariano on 12/6/2016.
+  * Modified by PabloGallazzi on 20/6/2016.
   */
-case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro:Int = 0) {
+case class Equipo(nombre: String,
+                  integrantes: List[Heroe] = List(),
+                  oro: Int = 0) {
 
-
-  def agregarMiembro(heroe: Heroe) =
-    integrantes = integrantes union List(heroe)
-
-
-  def reemplazarMiembro(unHeroe: Heroe, otroHeroe: Heroe) = {
-    quitarMiembro(unHeroe)
-    agregarMiembro(otroHeroe)
-  }
-
-  def quitarMiembro(heroe: Heroe) = integrantes = integrantes.filter(x => !x.eq(heroe))
-
-  def obtenerItem(item: Item) = {
-    val heroesQuePuedenEquiparItem: List[Heroe] = integrantes.filter(x=> item.sosEquipable(x))
-    if(heroesQuePuedenEquiparItem.isEmpty) venderItem(item)
-    else
-    asignarItem(item, heroesQuePuedenEquiparItem, heroesQuePuedenEquiparItem.head)
-  }
-
-  def venderItem(item: Item) = oro += item.getValor
-
-
-  private def asignarItem(item: Item, integrantes: List[Heroe], heroe: Heroe): Unit = {
-
-    if (integrantes.isEmpty && item.sosEquipable(heroe)) heroe.obtenerItem(item)
-    else {
-      val unHeroe: Heroe = integrantes.head.getCopia
-      val otroHeroe: Heroe = heroe.getCopia
-      unHeroe.obtenerItem(item)
-      unHeroe.equipar(item)
-      otroHeroe.obtenerItem(item)
-      otroHeroe.equipar(item)
-      if (unHeroe.statPrincipal > otroHeroe.statPrincipal) asignarItem(item, integrantes.tail, integrantes.head)
-      else asignarItem(item, integrantes.tail, heroe)
+  //TODO: Ver esto con Nico, no se si el concepto de None es el correcto
+  def mejorHeroeSegun(criterio: Heroe => Int): Option[Heroe] = {
+    def integrantesOrdenados: List[Heroe] = integrantes.sortBy(criterio)
+    if (integrantesOrdenados.nonEmpty) {
+      return Some(integrantesOrdenados.last)
     }
+    None
   }
 
-  def getLider: Option[Heroe] = {
-    val statsPrincipales: List[Double] = integrantes.map(h => h.statPrincipal)
-    val maximo: Double = statsPrincipales.max
-    if (statsPrincipales.count(x => x == maximo) == 2) None
-    else
-      integrantes.filter(x=> x.statPrincipal == maximo).headOption
-
+  def obtenerMiembro(heroe: Heroe): Equipo = {
+    this.copy(integrantes = this.integrantes.++:(List(heroe)))
   }
 
-  /** TAREA **/
-  def masAptoParaTarea(tarea: Tarea): Heroe = {
-    integrantes.sortWith((h1, h2) => tarea.facilidadTarea(h1, this) > tarea.facilidadTarea(h2, this)).head
+  def reemplazarMiembro(heroeASacar: Heroe, heroeAPoner: Heroe): Equipo = {
+    this.copy(integrantes = integrantes.filter(heroe => heroe != heroeASacar).++:(List(heroeAPoner)))
   }
 
-
-  /** MISION **/
-  def copiarIntegrantes = {
-    integrantes.foreach(h => h.hacerCopiaConEquipamiento())
+  def obtenerItem(item: Item): Equipo = {
+    def heroe: Option[Heroe] = obtenerMejorIntegranteParaItemONone(item)
+    if (heroe.nonEmpty) {
+      return reemplazarMiembro(heroe.get, heroe.get.equiparUnItem(item))
+    }
+    incrementarPozoComunEn(item.valor)
   }
 
-  def getCopia ={
-    this.copiarIntegrantes
-    copy(nombre,integrantes,oro)
+  def incrementarPozoComunEn(cantidad: Int) = {
+    copy(oro = this.oro + cantidad)
   }
 
-  def realizarMision(mision: Mision) = mision.teVaARealizarEquipo(this)
-
-  def restaurarEstadoOriginal(equipo:Equipo) = {
-    oro = equipo.oro
-    integrantes.foreach(h => h.restaurarEstadoOriginal())
+  //TODO: Implementar esto!
+  private def obtenerMejorIntegranteParaItemONone(item: Item): Option[Heroe] = {
+    None
   }
 
+  //TODO: Ver esto con Nico, no se si el concepto de None es el correcto
+  def lider: Option[Heroe] = {
+    def integrantesOrdenados: List[Heroe] = integrantes.sortBy({ heroe => heroe.getMainStatOrNone })
+    if (integrantesOrdenados.nonEmpty) {
+      return Some(integrantesOrdenados.last)
+    }
+    None
+  }
 
 }
