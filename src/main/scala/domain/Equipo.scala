@@ -4,7 +4,7 @@ package domain
 /**
   * Created by Mariano on 12/6/2016.
   */
-case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro:Int = 0) {
+case class Equipo(val nombre: String, var integrantes: List[Heroe] = List(), var oro:Int = 0) {
 
 
   def agregarMiembro(heroe: Heroe) =
@@ -25,7 +25,7 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
     asignarItem(item, heroesQuePuedenEquiparItem, heroesQuePuedenEquiparItem.head)
   }
 
-  def venderItem(item: Item) = oro += item.getValor
+  def venderItem(item: Item) = oro += item.valor
 
 
   private def asignarItem(item: Item, integrantes: List[Heroe], heroe: Heroe): Unit = {
@@ -53,8 +53,10 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
   }
 
   /** TAREA **/
-  def masAptoParaTarea(tarea: Tarea): Heroe = {
-    integrantes.sortWith((h1, h2) => tarea.facilidadTarea(h1, this) > tarea.facilidadTarea(h2, this)).head
+  def masAptoParaTarea(tarea: Tarea): Option[Heroe] = {
+    if (tarea.facilidadTarea(this).isEmpty) None
+    else Some(integrantes.maxBy(h1 =>  tarea.facilidadTarea(this).get(h1)))
+
   }
 
 
@@ -68,7 +70,7 @@ case class Equipo(nombre: String, var integrantes: List[Heroe] = List(), var oro
     copy(nombre,integrantes,oro)
   }
 
-  def realizarMision(mision: Mision) = mision.teVaARealizarEquipo(this)
+ // def realizarMision(mision: Mision) = mision.teVaARealizarEquipo(this)
 
   def restaurarEstadoOriginal(equipo:Equipo) = {
     oro = equipo.oro

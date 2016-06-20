@@ -3,7 +3,7 @@ package domain
 /**
   * Created by Mariano on 11/6/2016.
   */
-trait Item {
+abstract class Item {
 
   val valor: Int
   val prioridad: Int
@@ -17,9 +17,5 @@ trait Item {
   def incrementarVida(heroe: Heroe): (Double => Double) = { x => x }
 
   def sosEquipable(heroe: Heroe): Boolean = true
-
-  def getValor: Int = valor
-
-  def getPrioridad: Int = prioridad
 
 }

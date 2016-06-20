@@ -33,7 +33,7 @@ class Inventario[T <: Item](var equipamiento:List[T] = List()) {
 
   def incrementadorStats(heroe: Heroe) : ((Double => Double),(Double => Double),(Double => Double),(Double => Double)) = {
     val listFunc: List[((Double => Double),(Double => Double),(Double => Double),(Double => Double))] =
-    equipamiento.sortWith((i1,i2)=> i1.getPrioridad < i2.getPrioridad).
+    equipamiento.sortWith((i1,i2)=> i1.prioridad < i2.prioridad).
       map(e => (e.incrementarVida(heroe), e.incrementarFuerza(heroe),e.incrementarVelocidad(heroe), e.incrementarInteligenia(heroe)))
     listFunc.foldLeft(incrementadorDeEquipamiento)((a,b) => (a._1.andThen(b._1),a._2.andThen(b._2),a._3.andThen(b._3),a._4.andThen(b._4)))
   }

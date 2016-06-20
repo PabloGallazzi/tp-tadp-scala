@@ -20,17 +20,17 @@ class TareaTest {
   @Test
   def `un equipo sin lider o que su lider no es ladron no puede hacer la tarea robarTalisman` ={
 
-    assert(!robarTalisman.sosRealizablePor(unEquipo))
+    assert(robarTalisman.facilidadTarea(unEquipo).isEmpty)
     heroe.ahoraSosMago()
-    assert(!robarTalisman.sosRealizablePor(unEquipo))
-    robarTalisman.teVaARealizar(unEquipo)
+    assert(robarTalisman.facilidadTarea(unEquipo).isEmpty)
+
 
   }
 
   @Test
   def `un equipo que su lider es ladron termina la tarea robarTalisman y obtiene un talisman random` ={
     heroe.ahoraSosLadron()
-    assert(robarTalisman.sosRealizablePor(unEquipo))
+    assert(robarTalisman.facilidadTarea(unEquipo).isDefined)
     robarTalisman.teVaARealizar(unEquipo)
     println(heroe.inventario)
     println(otroHeroe.inventario)
@@ -39,16 +39,16 @@ class TareaTest {
   @Test
   def `un equipo realiza la tarea forzar puerta y el heroe que la realiza se ve afectado segun su trabajo` = {
 
-    assert(forzarPuerta.facilidadTarea(heroe,unEquipo) <
-      forzarPuerta.facilidadTarea(otroHeroe,unEquipo))
+    assert(forzarPuerta.facilidadTarea(unEquipo).get(heroe) <
+      forzarPuerta.facilidadTarea(unEquipo).get(otroHeroe))
     forzarPuerta.teVaARealizar(unEquipo)
     assertEquals((otroHeroe.hp,otroHeroe.inteligencia),(-3,3))
 
     heroe.ahoraSosLadron()
     otroHeroe.ahoraSosMago()
-    assert(forzarPuerta.facilidadTarea(heroe,unEquipo) <
-      forzarPuerta.facilidadTarea(otroHeroe,unEquipo))
-    assertEquals(forzarPuerta.facilidadTarea(otroHeroe,unEquipo),10+otroHeroe.getInteligencia,0)
+    assert(forzarPuerta.facilidadTarea(unEquipo).get(heroe) <
+      forzarPuerta.facilidadTarea(unEquipo).get(otroHeroe))
+    assertEquals(forzarPuerta.facilidadTarea(unEquipo).get(otroHeroe),10+otroHeroe.getInteligencia,0)
     forzarPuerta.teVaARealizar(unEquipo)
     assertEquals((otroHeroe.hp,otroHeroe.inteligencia),(-3,3))
 
@@ -57,8 +57,8 @@ class TareaTest {
   @Test
   def `un equipo realiza la tarea pelearConMonstruo y la facilidad depende del trabajo del lider y del heroe` ={
     //Sin Lider
-    assert(pelearContraMonstruo.facilidadTarea(heroe,unEquipo) ==
-      pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo))
+    assert(pelearContraMonstruo.facilidadTarea(unEquipo).get(heroe) ==
+      pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe))
     unEquipo.quitarMiembro(heroe)
     pelearContraMonstruo.teVaARealizar(unEquipo)
     assertEquals(otroHeroe.getHP,1,0)
@@ -67,23 +67,23 @@ class TareaTest {
 
     //Lider guerrero
     otroHeroe.ahoraSosGuerrero()
-    assert(pelearContraMonstruo.facilidadTarea(heroe,unEquipo) ==
-      pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo))
-    assertEquals(pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo),20,0)
+    assert(pelearContraMonstruo.facilidadTarea(unEquipo).get(heroe) ==
+      pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe))
+    assertEquals(pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe),20,0)
     pelearContraMonstruo.teVaARealizar(unEquipo)
     assertEquals(otroHeroe.getHP,11,0)
 
     //Lider no guerrero y heroe que realiza la tarea guerrero
     heroe.ahoraSosMago()
-    assert(pelearContraMonstruo.facilidadTarea(heroe,unEquipo) <
-      pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo))
-    assertEquals(pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo),10,0)
+    assert(pelearContraMonstruo.facilidadTarea(unEquipo).get(heroe) <
+      pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe))
+    assertEquals(pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe),10,0)
     pelearContraMonstruo.teVaARealizar(unEquipo)
     assertEquals(otroHeroe.getHP,11,0)
 
     //Sin guerreros
     otroHeroe.ahoraSosLadron()
-    assertEquals(pelearContraMonstruo.facilidadTarea(otroHeroe,unEquipo),0,0)
+    assertEquals(pelearContraMonstruo.facilidadTarea(unEquipo).get(otroHeroe),0,0)
     pelearContraMonstruo.teVaARealizar(unEquipo)
     assertEquals(otroHeroe.getHP,1,0)
 

@@ -64,7 +64,7 @@ class EquipoTest {
     unEquipo.obtenerItem(palitoMagico)
     assert(!otroHeroe.getInventario.contains(palitoMagico))
     assert(!heroe.getInventario.contains(palitoMagico))
-    assertEquals(unEquipo.oro, palitoMagico.getValor)
+    assertEquals(unEquipo.oro, palitoMagico.valor)
 
   }
 
@@ -76,20 +76,4 @@ class EquipoTest {
 
   }
 
-/*
-   @Test
-   def `asd` = {
-     heroe.sosGuerrero()
-     heroe.equipar(espadaDeLaVida)
-     val unHeroe: Heroe = heroe.getCopia
-     unHeroe.obtenerItem(talismanDeDedicacion)
-     unHeroe.equipar(talismanDeDedicacion)
-     unHeroe.trabajo = heroe.getTrabajo
-     assert(!unHeroe.eq(heroe))
-     assert(!palitoMagico.sosEquipable(unHeroe))
-    assertEquals((unHeroe.getFuerza, unHeroe.getInteligencia, unHeroe.getVelocidad, unHeroe.getElementosEquipados, unHeroe.getTrabajo, unHeroe.getInventario),
-       (heroe.getFuerza, heroe.getInteligencia, heroe.getVelocidad, heroe.getElementosEquipados, heroe.getTrabajo, heroe.getInventario))
-
-   }
-*/
 }
