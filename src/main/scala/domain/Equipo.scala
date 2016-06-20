@@ -9,13 +9,12 @@ case class Equipo(nombre: String,
                   integrantes: List[Heroe] = List(),
                   oro: Int = 0) {
 
-  //TODO: Ver esto con Nico, no se si el concepto de None es el correcto
   def mejorHeroeSegun(criterio: Heroe => Int): Option[Heroe] = {
     def integrantesOrdenados: List[Heroe] = integrantes.sortBy(criterio)
-    if (integrantesOrdenados.nonEmpty) {
-      return Some(integrantesOrdenados.last)
+    integrantesOrdenados match {
+      case Nil => None
+      case _ => Some(integrantesOrdenados.last)
     }
-    None
   }
 
   def obtenerMiembro(heroe: Heroe): Equipo = {
@@ -43,13 +42,12 @@ case class Equipo(nombre: String,
     None
   }
 
-  //TODO: Ver esto con Nico, no se si el concepto de None es el correcto
   def lider: Option[Heroe] = {
     def integrantesOrdenados: List[Heroe] = integrantes.sortBy({ heroe => heroe.getMainStatOrNone })
-    if (integrantesOrdenados.nonEmpty) {
-      return Some(integrantesOrdenados.last)
+    integrantesOrdenados match {
+      case Nil => None
+      case _ => Some(integrantesOrdenados.last)
     }
-    None
   }
 
 }
