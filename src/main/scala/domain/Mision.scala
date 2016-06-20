@@ -11,7 +11,7 @@ case class Mision(tareas: List[Tarea],
     resultado match {
       //TODO: Preguntar si lo que se quiere es el equipo original, creo que si!
       case Fracaso(tarea, equipoResultado) => Fracaso(tarea, equipo)
-      case Exito(equipoResultado) => Exito(equipoResultado)
+      case Exito(equipoResultado) => Exito(recompensa.darRecompensaAEquipo(equipoResultado))
     }
   }
 
