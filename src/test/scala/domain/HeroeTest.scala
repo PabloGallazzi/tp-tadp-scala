@@ -1,23 +1,12 @@
 package domain
 
-import org.junit.{Before, Test}
+import org.junit._
 
 /**
   * Created by Mariano on 11/6/2016.
   * Modified by PabloGallazzi on 20/6/2016.
   */
-class HeroeTest {
-  @Before
-  val stats: Stats = new Stats(10, 5, 6, 9)
-  val heroe: Heroe = new Heroe(stats, Some(Guerrero))
-  val itemSaraza: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => var puede: Boolean = true
-    puede = puede && (heroe.trabajo match {
-      case Some(Guerrero) => true
-      case _ => false
-    })
-    puede = puede && heroe.getStats.fuerza >= 5
-    puede
-  }, Some(Cabeza))
+class HeroeTest extends BaseTest{
 
   @Test
   def `test_el_heroe_se_crea_correctamente`() = {
