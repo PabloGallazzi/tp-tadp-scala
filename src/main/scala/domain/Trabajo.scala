@@ -8,13 +8,13 @@ abstract case class Trabajo(stats: Stats) {
 }
 
 object Guerrero extends Trabajo(Stats(10, 15, 0, -10)) {
-  def statPrincipal(heroe: Heroe): Double = heroe.baseStats.fuerza
+  def statPrincipal(heroe: Heroe): Double = heroe.getStats.fuerza
 }
 
 object Mago extends Trabajo(Stats(-20, 0, 0, 20)) {
-  def statPrincipal(heroe: Heroe): Double = heroe.baseStats.inteligencia
+  def statPrincipal(heroe: Heroe): Double = heroe.getStats.inteligencia
 }
 
 object Ladron extends Trabajo(Stats(-5, 0, 10, 0)) {
-  def statPrincipal(heroe: Heroe): Double = heroe.baseStats.velocidad
+  def statPrincipal(heroe: Heroe): Double = heroe.getStats.velocidad
 }
