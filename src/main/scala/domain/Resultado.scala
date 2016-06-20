@@ -3,9 +3,8 @@ package domain
 /**
   * Created by pgallazzi on 20/6/16.
   */
-abstract class Resultado
+abstract class Resultado(val equipo: Equipo)
 
-//TODO: Ver si el default es val, en case class si, pero acá no se.
-case class Exito(equipo: Equipo) extends Resultado
+case class Exito(override val equipo: Equipo) extends Resultado(equipo = equipo)
 
-case class Fracaso(tarea: Tarea, equipo: Equipo) extends Resultado
+case class Fracaso(tarea: Tarea, override val equipo: Equipo) extends Resultado(equipo = equipo)

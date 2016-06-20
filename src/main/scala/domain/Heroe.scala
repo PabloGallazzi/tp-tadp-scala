@@ -18,8 +18,7 @@ case class Heroe(baseStats: Stats,
       }
       return this.copy(itemsEquipado = filteredList.++:(List(item)))
     }
-    //TODO: Ver esto, no me cierra que sea lo que se pide
-    throw new InequipableException()
+    this
   }
 
   def agregarUnItemAlInventario(item: Item): Heroe = {
@@ -35,8 +34,8 @@ case class Heroe(baseStats: Stats,
     this.copy(trabajo = unTrabajo)
   }
 
-  def getMainStatOrNone: Option[Int]= {
-    if (trabajo.isDefined){
+  def getMainStatOrNone: Option[Int] = {
+    if (trabajo.isDefined) {
       trabajo.get.statPrincipal(this)
     }
     None
