@@ -31,6 +31,15 @@ class BaseTest {
     puede
   }, Some(Cabeza))
 
+  val itemSinPosicion: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => var puede: Boolean = true
+    puede = puede && (heroe.trabajo match {
+      case Some(Guerrero) => true
+      case _ => false
+    })
+    puede = puede && heroe.getStats.fuerza >= 5
+    puede
+  }, None)
+
   val tarea: Tarea = new Tarea(
     { equipo => equipo.mejorHeroeSegun(heroe => heroe.getStats.hp).isDefined &&
       equipo.mejorHeroeSegun(heroe => heroe.getStats.hp).get.getStats.hp > 10
@@ -40,4 +49,12 @@ class BaseTest {
     }
     }, { heroe => heroe.cambiarDeTrabajo(Some(Mago)) })
 
+  val tareaNoRealizable: Tarea = new Tarea(
+    { equipo => equipo.mejorHeroeSegun(heroe => heroe.getStats.hp).isDefined &&
+      equipo.mejorHeroeSegun(heroe => heroe.getStats.hp).get.getStats.hp > 100
+    }, { heroe => heroe.trabajo match {
+      case Some(Mago) => 10
+      case _ => 20
+    }
+    }, { heroe => heroe })
 }

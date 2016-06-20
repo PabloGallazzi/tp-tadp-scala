@@ -49,14 +49,6 @@ class HeroeTest extends BaseTest{
 
   @Test
   def `test_el_heroe_se_equipa_con_que_no_tiene_posicion`() = {
-    val itemSinPosicion: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => var puede: Boolean = false
-      puede = heroe.trabajo match {
-        case Some(Guerrero) => true
-        case _ => false
-      }
-      puede = puede && heroe.getStats.fuerza >= 5
-      puede
-    }, None)
     var nuevoHeroe: Heroe = heroe.equiparUnItem(itemSaraza)
     nuevoHeroe = nuevoHeroe.equiparUnItem(itemSinPosicion)
     nuevoHeroe = nuevoHeroe.equiparUnItem(itemSinPosicion)
@@ -79,13 +71,8 @@ class HeroeTest extends BaseTest{
 
   @Test
   def `test_el_heroe_puede_cambiar_de_trabajo_por_none_y_funciona`() = {
-    val itemSinPosicion: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => var puede: Boolean = true
-      puede = puede && heroe.getStats.fuerza >= 5
-      puede
-    }, None)
-    var nuevoHeroe: Heroe = heroe.cambiarDeTrabajo(None)
-    nuevoHeroe = nuevoHeroe.equiparUnItem(itemSinPosicion)
-    assert(nuevoHeroe.getStats.hp == 10 + 10)
+    val nuevoHeroe: Heroe = heroe.cambiarDeTrabajo(None)
+    assert(nuevoHeroe.getStats.hp == 10)
     assert(nuevoHeroe.baseStats == stats)
     assert(heroe.getStats.hp == stats.hp + 10)
     assert(heroe.baseStats == stats)
