@@ -31,6 +31,18 @@ class BaseTest {
     puede
   }, Some(Cabeza))
 
+  val itemMano: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
+  }, Some(Mano))
+
+  val itemManoDos: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
+  }, Some(Mano))
+
+  val itemManoTres: Item = new Item({ stats => stats.copy(hp = stats.hp + 20) }, { heroe => true
+  }, Some(Mano))
+
+  val itemDosManos: Item = new Item({ stats => stats.copy(hp = stats.hp + 15) }, { heroe => true
+  }, Some(DosManos))
+
   val itemSinPosicion: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => var puede: Boolean = true
     puede = puede && (heroe.trabajo match {
       case Some(Guerrero) => true

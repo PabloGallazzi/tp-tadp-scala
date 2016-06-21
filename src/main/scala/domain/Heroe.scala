@@ -7,16 +7,27 @@ package domain
   */
 case class Heroe(baseStats: Stats,
                  trabajo: Option[Trabajo] = None,
-                 itemsEquipado: List[Item] = List[Item](),
+                 itemsEquipados: List[Item] = List[Item](),
                  inventario: List[Item] = List[Item]()) {
 
   def equiparUnItem(item: Item): Heroe = {
     if (item.funcionRestriccionParaPortar(this)) {
-      var filteredList: List[Item] = this.itemsEquipado
+      var filteredList: List[Item] = this.itemsEquipados
       if (item.parteDelCuerpoQueOcupa.isDefined) {
-        filteredList = this.itemsEquipado.filter(itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
+        item.parteDelCuerpoQueOcupa.get match {
+          case DosManos => filteredList = itemsEquipados.filter(
+            itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
+            .filter(
+              itemFromList => !itemFromList.parteDelCuerpoQueOcupa.contains(Mano))
+          case Mano =>
+            filteredList = itemsEquipados.filter(itemFromList => !itemFromList.parteDelCuerpoQueOcupa.contains(DosManos))
+            if (filteredList.map(item => item.parteDelCuerpoQueOcupa).count(parteDelCuerpo => parteDelCuerpo.contains(Mano)) == 2) {
+              filteredList = filteredList.filter(item => item != filteredList.filter(item2 => item2.parteDelCuerpoQueOcupa.contains(Mano)).head)
+            }
+          case _ => filteredList = itemsEquipados.filter(itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
+        }
       }
-      return this.copy(itemsEquipado = filteredList.++:(List(item)))
+      return this.copy(itemsEquipados = filteredList.++:(List(item)))
     }
     this
   }
@@ -26,7 +37,7 @@ case class Heroe(baseStats: Stats,
   }
 
   def getStats: Stats = {
-    val newStats: Stats = itemsEquipado.foldRight[Stats](afterWorkStats)((item: Item, stats: Stats) => item.funcionModificadora(stats))
+    val newStats: Stats = itemsEquipados.foldRight[Stats](afterWorkStats)((item: Item, stats: Stats) => item.funcionModificadora(stats))
     new Stats(newStats.hp.max(1), newStats.fuerza.max(1), newStats.velocidad.max(1), newStats.inteligencia.max(1))
   }
 
