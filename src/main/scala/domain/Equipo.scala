@@ -41,12 +41,7 @@ case class Equipo(nombre: String,
     def mapped: List[(Int, Heroe)] = integrantes.map(heroe => {
       def heroeModificado = heroe.equiparUnItem(item)
       heroeModificado.trabajo match {
-        case Some(_) => {
-          heroe.trabajo match {
-            case Some(_) => (heroeModificado.trabajo.get.statPrincipal(heroeModificado) - heroe.trabajo.get.statPrincipal(heroe), heroe)
-            case None => null
-          }
-        }
+        case Some(_) => (heroeModificado.trabajo.get.statPrincipal(heroeModificado) - heroe.trabajo.get.statPrincipal(heroe), heroe)
         case None => null
       }
     })
