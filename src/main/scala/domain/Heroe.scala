@@ -35,17 +35,16 @@ case class Heroe(baseStats: Stats,
   }
 
   def getMainStatOrNone: Option[Int] = {
-    if (trabajo.isDefined) {
-      trabajo.get.statPrincipal(this)
+    trabajo match {
+      case Some(_) => Some(trabajo.get.statPrincipal(this))
+      case None => None
     }
-    None
   }
 
   private def afterWorkStats: Stats = {
-    if (trabajo.isDefined) {
-      new Stats((baseStats.hp + trabajo.get.stats.hp).max(1), (baseStats.fuerza + trabajo.get.stats.fuerza).max(1), (baseStats.velocidad + trabajo.get.stats.velocidad).max(1), (baseStats.inteligencia + trabajo.get.stats.inteligencia).max(1))
-    } else {
-      baseStats
+    trabajo match {
+      case Some(_) => new Stats((baseStats.hp + trabajo.get.stats.hp).max(1), (baseStats.fuerza + trabajo.get.stats.fuerza).max(1), (baseStats.velocidad + trabajo.get.stats.velocidad).max(1), (baseStats.inteligencia + trabajo.get.stats.inteligencia).max(1))
+      case None => baseStats
     }
   }
 

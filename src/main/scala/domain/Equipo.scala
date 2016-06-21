@@ -27,10 +27,10 @@ case class Equipo(nombre: String,
 
   def obtenerItem(item: Item): Equipo = {
     def heroe: Option[Heroe] = obtenerMejorIntegranteParaItemONone(item)
-    if (heroe.nonEmpty) {
-      return reemplazarMiembro(heroe.get, heroe.get.equiparUnItem(item))
+    heroe match {
+      case None => incrementarPozoComunEn(item.valor)
+      case _ => reemplazarMiembro(heroe.get, heroe.get.equiparUnItem(item))
     }
-    incrementarPozoComunEn(item.valor)
   }
 
   def incrementarPozoComunEn(cantidad: Int) = {
