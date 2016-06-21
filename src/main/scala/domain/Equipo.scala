@@ -37,9 +37,23 @@ case class Equipo(nombre: String,
     copy(oro = this.oro + cantidad)
   }
 
-  //TODO: Implementar esto!
   private def obtenerMejorIntegranteParaItemONone(item: Item): Option[Heroe] = {
-    None
+    def mapped: List[(Int, Heroe)] = integrantes.map(heroe => {
+      def heroeModificado = heroe.equiparUnItem(item)
+      heroeModificado.trabajo match {
+        case Some(_) => {
+          heroe.trabajo match {
+            case Some(_) => (heroeModificado.trabajo.get.statPrincipal(heroeModificado) - heroe.trabajo.get.statPrincipal(heroe), heroe)
+            case None => null
+          }
+        }
+        case None => null
+      }
+    })
+    mapped match {
+      case Nil => None
+      case something => Some(something.sortBy(it => it._1).last._2)
+    }
   }
 
   def lider: Option[Heroe] = {
