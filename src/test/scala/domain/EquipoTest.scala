@@ -42,7 +42,7 @@ class EquipoTest extends BaseTest{
   }
 
   @Test
-  def `test_el_equipo_puede_obtener_item_entonces_se_devuelve_uno_distinto`() = {
+  def `test_el_equipo_no_puede_obtener_item_entonces_lo_vende_y_devuelve_un_equipo_distinto`() = {
     val equipoDistinto: Equipo = equipoSinTrabajos.obtenerItem(itemSaraza)
     assert(equipoDistinto != equipoSinTrabajos)
     assert(equipoDistinto.oro == 100)
