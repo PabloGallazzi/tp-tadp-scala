@@ -33,7 +33,7 @@ case class Equipo(nombre: String,
     }
   }
 
-  def incrementarPozoComunEn(cantidad: Int) = {
+  def incrementarPozoComunEn(cantidad: Int): Equipo = {
     copy(oro = this.oro + cantidad)
   }
 
@@ -41,10 +41,10 @@ case class Equipo(nombre: String,
     def mapped: List[(Int, Heroe)] = integrantes.map(heroe => {
       def heroeModificado = heroe.equiparUnItem(item)
       heroeModificado.trabajo match {
-        case Some(_) => (heroeModificado.trabajo.get.statPrincipal(heroeModificado) - heroe.trabajo.get.statPrincipal(heroe), heroe)
-        case None => null
+        case Some(_) => ((heroeModificado.trabajo.get.statPrincipal(heroeModificado) - heroe.trabajo.get.statPrincipal(heroe)).max(0), heroe)
+        case None => (0, heroe)
       }
-    })
+    }).filter(x => x._1 != 0)
     mapped match {
       case Nil => None
       case something => Some(something.sortBy(it => it._1).last._2)

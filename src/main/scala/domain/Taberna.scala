@@ -17,23 +17,23 @@ class Taberna(misiones: List[Mision]) {
   }
 
   private def realizarMisiones(misones: List[Mision], equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean)): Resultado = {
-    def mejorMision: Mision = obtenerMejorMisionDadaUnaLista(equipo, criterio, misones)
+    def mejorMision: Option[Mision] = obtenerMejorMisionDadaUnaLista(equipo, criterio, misones)
     mejorMision match {
-      case null => Exito(equipo)
+      case None => Exito(equipo)
       case _ => {
-        def resultado: Resultado = mejorMision.realizarsePor(equipo)
+        def resultado: Resultado = mejorMision.get.realizarsePor(equipo)
         resultado match {
           case Fracaso(tarea, equipoFinal) => new Fracaso(tarea, equipoFinal)
-          case Exito(equipoDespuesDeTarea) => realizarMisiones(misiones.filter(mision => mision != mejorMision), equipoDespuesDeTarea, criterio)
+          case Exito(equipoDespuesDeTarea) => realizarMisiones(misiones.filter(mision => mision != mejorMision.get), equipoDespuesDeTarea, criterio)
         }
       }
     }
   }
 
-  private def obtenerMejorMisionDadaUnaLista(equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean), misiones: List[Mision]): Mision = {
+  private def obtenerMejorMisionDadaUnaLista(equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean), misiones: List[Mision]): Option[Mision] = {
     misiones match {
-      case Nil => null
-      case head :: Nil => head
+      case Nil => None
+      case head :: Nil => Some(head)
       case headOne :: headTwo :: tail => obtenerMejorMisionDadaUnaLista(equipo, criterio, elegirMision(equipo, headOne, headTwo, criterio) :: tail)
     }
   }

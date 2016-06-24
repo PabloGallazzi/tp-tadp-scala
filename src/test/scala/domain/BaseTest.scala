@@ -12,13 +12,17 @@ class BaseTest {
   val stats2: Stats = new Stats(12, 5, 6, 9)
   val stats3: Stats = new Stats(11, 5, 6, 9)
   val stats4: Stats = new Stats(19, 5, 6, 9)
+  val stats5: Stats = new Stats(19, 5, 6, 9)
 
   val heroe: Heroe = new Heroe(stats, Some(Guerrero))
   val heroe2: Heroe = new Heroe(stats2, Some(Guerrero))
   val heroe3: Heroe = new Heroe(stats3, Some(Guerrero))
   val heroe4: Heroe = new Heroe(stats4, Some(Mago))
+  val heroe5: Heroe = new Heroe(stats5, None)
 
   val equipo: Equipo = new Equipo("EquipoSaraza", List(heroe, heroe2, heroe3))
+
+  val equipoSinTrabajos = new Equipo("EquipoSinTrabajos", List(heroe5))
 
   def equipoVacio: Equipo = new Equipo("Equipo vacio")
 
@@ -29,7 +33,7 @@ class BaseTest {
     })
     puede = puede && heroe.getStats.fuerza >= 5
     puede
-  }, Some(Cabeza))
+  }, Some(Cabeza), valor = 100)
 
   val itemMano: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
   }, Some(Mano))
