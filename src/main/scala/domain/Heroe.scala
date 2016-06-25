@@ -7,35 +7,14 @@ package domain
   */
 case class Heroe(baseStats: Stats,
                  trabajo: Option[Trabajo] = None,
-                 itemsEquipados: List[Item] = List[Item](),
-                 inventario: List[Item] = List[Item]()) {
+                 itemsEquipados: List[Item] = List[Item]()) {
 
   def equiparUnItem(item: Item): Heroe = {
     if (item.funcionRestriccionParaPortar(this)) {
-      var filteredList: List[Item] = this.itemsEquipados
-      var listToSendToInventario: List[Item] = List()
-      if (item.parteDelCuerpoQueOcupa.isDefined) {
-        item.parteDelCuerpoQueOcupa.get match {
-          case DosManos => filteredList = itemsEquipados.filter(
-            itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
-            .filter(
-              itemFromList => !itemFromList.parteDelCuerpoQueOcupa.contains(Mano))
-          case Mano =>
-            filteredList = itemsEquipados.filter(itemFromList => !itemFromList.parteDelCuerpoQueOcupa.contains(DosManos))
-            if (filteredList.map(item => item.parteDelCuerpoQueOcupa).count(parteDelCuerpo => parteDelCuerpo.contains(Mano)) == 2) {
-              filteredList = filteredList.filter(item => item != filteredList.filter(item2 => item2.parteDelCuerpoQueOcupa.contains(Mano)).head)
-            }
-          case _ => filteredList = itemsEquipados.filter(itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
-        }
-      }
-      listToSendToInventario = itemsEquipados.filter(item => !filteredList.contains(item))
-      return this.copy(itemsEquipados = filteredList.++:(List(item)), inventario = inventario.++:(listToSendToInventario))
+      val filteredList: List[Item] = item.parteDelCuerpoQueOcupa.fold(itemsEquipados) { parteDelCuerpo => itemsEquipados.filterNot(item => item.parteDelCuerpoQueOcupa.isEmpty || Cuerpo.conflictuan(parteDelCuerpo, item.parteDelCuerpoQueOcupa.get)) }
+      return this.copy(itemsEquipados = filteredList :+ item)
     }
     this
-  }
-
-  def agregarUnItemAlInventario(item: Item): Heroe = {
-    this.copy(inventario = this.inventario.++:(List(item)))
   }
 
   def getStats: Stats = {
@@ -47,18 +26,11 @@ case class Heroe(baseStats: Stats,
     this.copy(trabajo = unTrabajo)
   }
 
-  def getMainStatOrNone: Option[Int] = {
-    trabajo match {
-      case Some(_) => Some(trabajo.get.statPrincipal(this))
-      case None => None
-    }
-  }
+  def getMainStatOrNone: Option[Int] = trabajo.map(_.statPrincipal(this))
 
-  private def afterWorkStats: Stats = {
-    trabajo match {
-      case Some(_) => new Stats((baseStats.hp + trabajo.get.stats.hp).max(1), (baseStats.fuerza + trabajo.get.stats.fuerza).max(1), (baseStats.velocidad + trabajo.get.stats.velocidad).max(1), (baseStats.inteligencia + trabajo.get.stats.inteligencia).max(1))
-      case None => baseStats
-    }
+
+  private def afterWorkStats: Stats = trabajo.fold(baseStats) {
+    trabajo => new Stats((baseStats.hp + trabajo.stats.hp).max(1), (baseStats.fuerza + trabajo.stats.fuerza).max(1), (baseStats.velocidad + trabajo.stats.velocidad).max(1), (baseStats.inteligencia + trabajo.stats.inteligencia).max(1))
   }
 
 }

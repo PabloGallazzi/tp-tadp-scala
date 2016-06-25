@@ -93,17 +93,6 @@ class HeroeTest extends BaseTest{
   }
 
   @Test
-  def `test_agregar_item_al_inventario_no_afecta_stats`() = {
-    val nuevoHeroe: Heroe = heroe.agregarUnItemAlInventario(itemSaraza)
-    assert(nuevoHeroe.inventario.size == 1)
-    assert(nuevoHeroe.getStats.hp == stats.hp + 10)
-    assert(nuevoHeroe.baseStats == stats)
-    assert(heroe.getStats.hp == stats.hp + 10)
-    assert(heroe.inventario.isEmpty)
-    assert(heroe.baseStats == stats)
-  }
-
-  @Test
   def `test_el_heroe_se_equipa_con_algo_que_ya_tiene_ocupado_y_queda_bien`() = {
     var nuevoHeroe: Heroe = heroe.equiparUnItem(itemSaraza)
     nuevoHeroe = nuevoHeroe.equiparUnItem(itemSaraza)

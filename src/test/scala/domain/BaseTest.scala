@@ -36,13 +36,13 @@ class BaseTest {
   }, Some(Cabeza), 100)
 
   val itemMano: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
-  }, Some(Mano))
+  }, Some(ManoDerecha))
 
   val itemManoDos: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
-  }, Some(Mano))
+  }, Some(ManoIzquierda))
 
   val itemManoTres: Item = new Item({ stats => stats.copy(hp = stats.hp + 20) }, { heroe => true
-  }, Some(Mano))
+  }, Some(ManoDerecha))
 
   val itemDosManos: Item = new Item({ stats => stats.copy(hp = stats.hp + 15) }, { heroe => true
   }, Some(DosManos))
