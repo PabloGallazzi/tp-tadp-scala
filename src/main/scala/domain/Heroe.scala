@@ -13,6 +13,7 @@ case class Heroe(baseStats: Stats,
   def equiparUnItem(item: Item): Heroe = {
     if (item.funcionRestriccionParaPortar(this)) {
       var filteredList: List[Item] = this.itemsEquipados
+      var listToSendToInventario: List[Item] = List()
       if (item.parteDelCuerpoQueOcupa.isDefined) {
         item.parteDelCuerpoQueOcupa.get match {
           case DosManos => filteredList = itemsEquipados.filter(
@@ -27,7 +28,8 @@ case class Heroe(baseStats: Stats,
           case _ => filteredList = itemsEquipados.filter(itemFromList => itemFromList.parteDelCuerpoQueOcupa != item.parteDelCuerpoQueOcupa)
         }
       }
-      return this.copy(itemsEquipados = filteredList.++:(List(item)))
+      listToSendToInventario = itemsEquipados.filter(item => !filteredList.contains(item))
+      return this.copy(itemsEquipados = filteredList.++:(List(item)), inventario = inventario.++:(listToSendToInventario))
     }
     this
   }

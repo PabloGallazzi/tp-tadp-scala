@@ -33,7 +33,7 @@ class BaseTest {
     })
     puede = puede && heroe.getStats.fuerza >= 5
     puede
-  }, Some(Cabeza), valor = 100)
+  }, Some(Cabeza), 100)
 
   val itemMano: Item = new Item({ stats => stats.copy(hp = stats.hp + 10) }, { heroe => true
   }, Some(Mano))
