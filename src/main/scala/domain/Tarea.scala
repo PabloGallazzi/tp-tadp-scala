@@ -26,7 +26,7 @@ case class Tarea(validadorEquipoPuedeRealizar: Equipo => Boolean,
       x2 <- equipo.mejorHeroeSegun(x1)
     } yield equipo.reemplazarMiembro(x2,afectadorDeHeroe(x2))
 
-    //Opcion con recursividad
+    //Opcion con pattern matching
  /*   def criterio: Option[Heroe => Int] = facilidadTarea(equipo)
     criterio match {
       case None => None
@@ -38,6 +38,7 @@ case class Tarea(validadorEquipoPuedeRealizar: Equipo => Boolean,
         }
       }
     }*/
+
   }
 
 }

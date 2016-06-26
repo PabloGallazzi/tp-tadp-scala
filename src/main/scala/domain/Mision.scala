@@ -6,9 +6,17 @@ package domain
 case class Mision(tareas: List[Tarea],
                   recompensa: Recompensa) {
 
+
   def realizarsePor(equipo: Equipo): Option[Resultado] = {
-    Some(realizarTareas(equipo, tareas))
+    def resultado: Resultado = realizarTareas(equipo, tareas)
+    resultado match {
+      //TODO: Preguntar si lo que se quiere es el equipo original, creo que si!
+      case Fracaso(tarea, equipoResultado) => Some(Fracaso(tarea, equipo))
+      case Exito(equipoResultado) => Some(Exito(recompensa.darRecompensaAEquipo(equipoResultado)))
+    }
   }
+
+
 
   private def realizarTareas(equipo: Equipo, tareasARealizar: List[Tarea]): Resultado = {
     tareasARealizar match {
