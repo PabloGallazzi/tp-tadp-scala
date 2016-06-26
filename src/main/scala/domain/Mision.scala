@@ -30,7 +30,7 @@ case class Mision(tareas: List[Tarea],
       r match {
         case f: Fracaso => f
         case e: Exito =>
-          def someEquipo = t.realizarPorEquipo(equipo)
+          def someEquipo = t.realizarPorEquipo(e.equipo)
           if (someEquipo.isDefined) new Exito(someEquipo.get) else new Fracaso(t,equipo)
       })
 
