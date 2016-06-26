@@ -1,5 +1,8 @@
 package domain
 
+import scala.util.Try
+
+
 /**
   * Created by Mariano on 17/6/2016.
   */
@@ -11,7 +14,9 @@ class Taberna(misiones: List[Mision]) {
       return mision
     }
     otraMision
+
   }
+
 
 
   def entrenar(equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean)): Equipo = {
@@ -20,12 +25,12 @@ class Taberna(misiones: List[Mision]) {
 
   private def realizarMisiones(misiones: List[Mision], equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean)):Option[Resultado] = {
 
-
+    /** Ver como hacer con orden superior sin recursividad**/
     def mejorMision: Option[Mision] = obtenerMejorMisionDadaUnaLista(equipo, criterio, misiones)
     mejorMision match {
       case None => Some(Exito(equipo))
       case _ => {
-        def resultado: Resultado = mejorMision.get.realizarsePor(equipo).get
+        def resultado: Resultado = mejorMision.flatMap(_.realizarsePor(equipo)).get
         resultado match {
           case Fracaso(tarea, equipoFinal) => Some(new Fracaso(tarea, equipoFinal))
           case Exito(equipoDespuesDeTarea) => realizarMisiones(misiones.filter(mision => mision != mejorMision.get), equipoDespuesDeTarea, criterio)
@@ -33,6 +38,7 @@ class Taberna(misiones: List[Mision]) {
       }
     }
   }
+
 
   private def obtenerMejorMisionDadaUnaLista(equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean), misiones: List[Mision]): Option[Mision] = {
 
