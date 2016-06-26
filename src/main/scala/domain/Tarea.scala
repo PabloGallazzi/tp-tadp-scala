@@ -17,11 +17,16 @@ case class Tarea(validadorEquipoPuedeRealizar: Equipo => Boolean,
 
 
   def realizarPorEquipo(equipo: Equipo): Option[Equipo] = {
-    
-    /** Ver de hacer con for comprehension **/
-    facilidadTarea(equipo).flatMap(f=> equipo.mejorHeroeSegun(f)).map(h=> equipo.reemplazarMiembro(h,afectadorDeHeroe(h)))
 
+    //Opcion con funciones de orden superior
+    //facilidadTarea(equipo).flatMap(f=> equipo.mejorHeroeSegun(f)).map(h=> equipo.reemplazarMiembro(h,afectadorDeHeroe(h)))
 
+    //Opcion con for comprehension
+    for{ x1 <- facilidadTarea(equipo)
+      x2 <- equipo.mejorHeroeSegun(x1)
+    } yield equipo.reemplazarMiembro(x2,afectadorDeHeroe(x2))
+
+    //Opcion con recursividad
  /*   def criterio: Option[Heroe => Int] = facilidadTarea(equipo)
     criterio match {
       case None => None
