@@ -26,15 +26,16 @@ case class Mision(tareas: List[Tarea],
 
   private def realizarTareas(equipo: Equipo, tareasARealizar: List[Tarea]): Resultado = {
 
-    def actualizarResultado(someEquipo: Option[Equipo], resultadoAnterior: Resultado, tarea: Tarea):Resultado = {
-      resultadoAnterior match {
-        case f:Fracaso => f
-        case e:Exito =>
-          if (someEquipo.isDefined) new Exito(someEquipo.get) else new Fracaso(tarea,equipo)
-      }
-    }
+    tareasARealizar.foldLeft[Resultado](new Exito(equipo))((r,t)=>
+      r match {
+        case f: Fracaso => f
+        case e: Exito =>
+          def someEquipo = t.realizarPorEquipo(equipo)
+          if (someEquipo.isDefined) new Exito(someEquipo.get) else new Fracaso(t,equipo)
+      })
 
-    tareasARealizar.foldLeft[Resultado](new Exito(equipo))((r,t)=> actualizarResultado(t.realizarPorEquipo(equipo),r,t))
+
+
 
  //Opcion con recursividad
 /*
