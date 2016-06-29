@@ -9,12 +9,18 @@ class TareaTest extends BaseTest{
 
   @Test
   def `test_la_tarea_devuelve_correctamente_el_calculador_para_heroe`() = {
-    assert(tarea.realizarPorEquipo(equipo).isDefined)
+    val resultado = tarea.realizarPorEquipo(equipo)
+    assert(resultado.isInstanceOf[Exito])
+    def exito: Exito = resultado.asInstanceOf[Exito]
+    assert(resultado.equipo != equipo)
   }
 
   @Test
-  def `test_la_tarea_devuelve_none_cuando_no_puede_ser_realizada`() = {
-    assert(tareaNoRealizable.realizarPorEquipo(equipo).isEmpty)
+  def `test_la_tarea_devuelve_fracaso_cuando_no_puede_ser_realizada`() = {
+    val resultado = tareaNoRealizable.realizarPorEquipo(equipo)
+    assert(resultado.isInstanceOf[Fracaso])
+    def exito: Fracaso = resultado.asInstanceOf[Fracaso]
+    assert(resultado.equipo == equipo)
   }
 
 }

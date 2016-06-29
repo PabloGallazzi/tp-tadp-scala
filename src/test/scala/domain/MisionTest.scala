@@ -10,21 +10,23 @@ class MisionTest extends BaseTest{
   @Test
   def `test_la_mision_es_realizable`() = {
     val mision: Mision = new Mision(List(tarea, tarea), new masOroParaElEquipo(100))
-    def resultado: Resultado = mision.realizarsePor(equipo).get
-    assert(mision.realizarsePor(equipo).get.isInstanceOf[Exito])
+    def resultado: Resultado = mision.realizarsePor(equipo)
+    assert(mision.realizarsePor(equipo).isInstanceOf[Exito])
     def exito: Exito = resultado.asInstanceOf[Exito]
-    assert(exito.equipo != equipo)
+    assert(exito.equipo.oro == 100)
+    assert(exito.equipo.integrantes.size == 3)
 
   }
 
   @Test
   def `test_la_mision_no_es_realizable`() = {
-    val mision: Mision = new Mision(List(tareaNoRealizable, tarea), new masOroParaElEquipo(100))
-    def resultado: Resultado = mision.realizarsePor(equipo).get
-    assert(mision.realizarsePor(equipo).get.isInstanceOf[Fracaso])
+    val mision: Mision = new Mision(List(tarea, tareaNoRealizable), new masOroParaElEquipo(100))
+    def resultado: Resultado = mision.realizarsePor(equipo)
+    assert(mision.realizarsePor(equipo).isInstanceOf[Fracaso])
     def fracaso: Fracaso = resultado.asInstanceOf[Fracaso]
     assert(fracaso.tarea == tareaNoRealizable)
-    assert(fracaso.equipo == equipo)
+    assert(fracaso.equipo.oro == 0)
+    assert(fracaso.equipo.integrantes.size == 3)
   }
 
 }

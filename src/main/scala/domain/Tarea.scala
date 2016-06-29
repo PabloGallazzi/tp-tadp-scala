@@ -16,29 +16,10 @@ case class Tarea(validadorEquipoPuedeRealizar: Equipo => Boolean,
   }
 
 
-  def realizarPorEquipo(equipo: Equipo): Option[Equipo] = {
-
-    //Opcion con funciones de orden superior
-    //facilidadTarea(equipo).flatMap(f=> equipo.mejorHeroeSegun(f)).map(h=> equipo.reemplazarMiembro(h,afectadorDeHeroe(h)))
-
-    //Opcion con for comprehension
-    for{ x1 <- facilidadTarea(equipo)
-      x2 <- equipo.mejorHeroeSegun(x1)
-    } yield equipo.reemplazarMiembro(x2,afectadorDeHeroe(x2))
-
-    //Opcion con pattern matching
- /*   def criterio: Option[Heroe => Int] = facilidadTarea(equipo)
-    criterio match {
-      case None => None
-      case Some(_) => {
-        def heroeONone: Option[Heroe] = equipo.mejorHeroeSegun(criterio.get)
-        heroeONone match {
-          case None => None
-          case Some(_) => Some(equipo.reemplazarMiembro(heroeONone.get, afectadorDeHeroe(heroeONone.get)))
-        }
-      }
-    }*/
-
+  def realizarPorEquipo(equipo: Equipo): Resultado = {
+    (for {x1 <- facilidadTarea(equipo)
+          x2 <- equipo.mejorHeroeSegun(x1)
+    } yield equipo.reemplazarMiembro(x2, afectadorDeHeroe(x2))).fold[Resultado](Fracaso(this, equipo))(equipo => Exito(equipo))
   }
 
 }
