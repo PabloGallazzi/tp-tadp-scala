@@ -5,16 +5,11 @@ package domain
   */
 class Taberna(misiones: List[Mision]) {
 
-  def elegirMision(equipo: Equipo, misiones: List[Mision], criterio: ((Equipo, Equipo) => Boolean)): Option[Mision] = {
-    misiones match {
-      case headOne :: headTwo :: tail => if (criterio(headOne.realizarsePor(equipo).equipo, headTwo.realizarsePor(equipo).equipo)) {
-        Some(headOne)
-      } else {
-        Some(headTwo)
-      }
-      case headOne :: Nil => Some(headOne)
-      case Nil => None
+  def elegirMision(equipo: Equipo, mision: Mision, otraMision: Mision, criterio: ((Equipo, Equipo) => Boolean)): Mision = {
+    if (criterio(mision.realizarsePor(equipo).equipo, otraMision.realizarsePor(equipo).equipo)) {
+      return mision
     }
+    otraMision
   }
 
   def entrenar(equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean)): Equipo = {
@@ -22,10 +17,11 @@ class Taberna(misiones: List[Mision]) {
   }
 
   private def realizarMisiones(misiones: List[Mision], equipo: Equipo, criterio: ((Equipo, Equipo) => Boolean)): Equipo = {
-    misiones.sortWith((m1, m2) => criterio(m1.realizarsePor(equipo).equipo, m2.realizarsePor(equipo).equipo)) match {
-      case Nil => equipo
-      case headOne :: tail => headOne.realizarsePor(equipo).map(equipo => realizarMisiones(tail, equipo, criterio)).equipo
-    }
+    mejorMisionDeLaLista(equipo, misiones, criterio).fold(equipo)(mision => mision.realizarsePor(equipo).map(equipo => realizarMisiones(misiones.filter(m => m != mision), equipo, criterio)).equipo)
+  }
+
+  def mejorMisionDeLaLista(equipo: Equipo, misiones: List[Mision], criterio: ((Equipo, Equipo) => Boolean)): Option[Mision] = {
+    misiones.sortWith((m1, m2) => criterio(m1.realizarsePor(equipo).equipo, m2.realizarsePor(equipo).equipo)).headOption
   }
 
 }
