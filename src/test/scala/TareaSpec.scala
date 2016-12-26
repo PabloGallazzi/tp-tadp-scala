@@ -1,11 +1,9 @@
-package domain
-
-import org.junit._
+import org.junit.Test
 
 /**
   * Created by pgallazzi on 20/6/16.
   */
-class TareaTest extends BaseTest{
+class TareaSpec extends BaseSpec{
 
   @Test
   def `test_la_tarea_devuelve_correctamente_el_calculador_para_heroe`() = {

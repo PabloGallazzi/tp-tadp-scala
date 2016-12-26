@@ -1,5 +1,3 @@
-package domain
-
 /**
   * Created by pgallazzi on 18/6/16.
   */

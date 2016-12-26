@@ -1,14 +1,12 @@
-package domain
-
-import org.junit._
+import org.junit.Test
 
 /**
   * Created by pgallazzi on 20/6/16.
   */
-class EquipoTest extends BaseTest{
+class EquipoSpec extends BaseSpec{
 
   @Test
-  def `test_el_equipo_se_crea_correctamente`() = {
+  def test_el_equipo_se_crea_correctamente = {
     assert(equipo.nombre == "EquipoSaraza" && equipo.oro == 0 && equipo.integrantes.size == 3)
   }
 

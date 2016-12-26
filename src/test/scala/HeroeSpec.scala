@@ -1,12 +1,10 @@
-package domain
-
-import org.junit._
+import org.junit.Test
 
 /**
   * Created by Mariano on 11/6/2016.
   * Modified by PabloGallazzi on 20/6/2016.
   */
-class HeroeTest extends BaseTest{
+class HeroeSpec extends BaseSpec{
 
   @Test
   def `test_el_heroe_se_crea_correctamente`() = {

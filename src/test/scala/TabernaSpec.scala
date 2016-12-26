@@ -1,11 +1,9 @@
-package domain
-
-import org.junit._
+import org.junit.Test
 
 /**
   * Created by pgallazzi on 20/6/16.
   */
-class TabernaTest extends BaseTest{
+class TabernaSpec extends BaseSpec{
 
   @Test
   def `test_la_taberna_no_es_realizable`() = {

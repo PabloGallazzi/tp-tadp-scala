@@ -1,11 +1,9 @@
-package domain
-
-import org.junit._
+import org.junit.Test
 
 /**
   * Created by pgallazzi on 20/6/16.
   */
-class MisionTest extends BaseTest{
+class MisionSpec extends BaseSpec{
 
   @Test
   def `test_la_mision_es_realizable`() = {

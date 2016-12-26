@@ -1,4 +1,4 @@
-package domain
+
 
 /**
   * Created by Mariano on 11/6/2016.

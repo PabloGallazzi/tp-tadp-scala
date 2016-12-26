@@ -1,11 +1,11 @@
-package domain
-
-import org.junit.Before
+import junit.framework.TestCase
+import org.junit.{Before, Ignore}
 
 /**
   * Created by pgallazzi on 20/6/16.
   */
-class BaseTest {
+@Ignore
+class BaseSpec extends TestCase{
 
   @Before
   val stats: Stats = new Stats(10, 5, 6, 9)
